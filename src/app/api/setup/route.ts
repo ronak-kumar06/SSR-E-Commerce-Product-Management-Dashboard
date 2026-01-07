@@ -1,11 +1,47 @@
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import connectDB from "@/lib/mongodb";
+import User from "@/models/User";
 
 export const runtime = "nodejs";
 
 export async function GET() {
-  return NextResponse.json({
-    ok: true,
-    message: "Setup route is reachable",
-  });
-}
+  try {
+    await connectDB();
 
+    const email = "admin@example.com";
+    const password = "demo@123";
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const existing = await User.findOne({ email });
+
+    if (existing) {
+      existing.password = hashedPassword;
+      await existing.save();
+      return NextResponse.json({
+        message: "Admin password reset successfully",
+        email,
+        password,
+      });
+    }
+
+    await User.create({
+      name: "Admin User",
+      email,
+      password: hashedPassword,
+      role: "admin",
+    });
+
+    return NextResponse.json({
+      message: "Admin created successfully",
+      email,
+      password,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Admin setup failed" },
+      { status: 500 }
+    );
+  }
+}
