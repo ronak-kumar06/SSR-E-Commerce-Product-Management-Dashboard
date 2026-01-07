@@ -38,10 +38,21 @@ export async function GET() {
       email,
       password,
     });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Admin setup failed" },
-      { status: 500 }
-    );
-  }
+//   } catch (error) {
+//     return NextResponse.json(
+//       { error: "Admin setup failed" },
+//       { status: 500 }
+//     );
+//   }
+} catch (error: any) {
+  console.error("ADMIN SETUP ERROR:", error);
+
+  return NextResponse.json(
+    {
+      error: "Admin setup failed",
+      details: error?.message || error,
+    },
+    { status: 500 }
+  );
+}
 }
