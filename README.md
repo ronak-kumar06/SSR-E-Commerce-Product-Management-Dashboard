@@ -185,6 +185,8 @@ The application uses server-side rendering and runs in the Node.js runtime.
 
 ## Demo Credentials (For Evaluation)
 
+Link: https://ssr-e-commerce-product-management-d-gamma.vercel.app/dashboard
+
 Email: admin@example.com  
 Password: demo@123  
 Role: Admin
