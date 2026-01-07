@@ -185,6 +185,6 @@ The application uses server-side rendering and runs in the Node.js runtime.
 
 ## Demo Credentials (For Evaluation)
 
-Email: demo.admin@example.com  
+Email: admin@example.com  
 Password: demo@123  
 Role: Admin
