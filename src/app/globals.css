@@ -26,3 +26,16 @@ body {
   }
 }
 
+/* ===== Fix form text visibility regardless of theme ===== */
+
+input,
+textarea,
+select {
+  background-color: #ffffff;
+  color: #111827; /* gray-900 */
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #9ca3af; /* gray-400 */
+}

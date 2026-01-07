@@ -190,3 +190,12 @@ Link: https://ssr-e-commerce-product-management-d-gamma.vercel.app/dashboard
 Email: admin@example.com  
 Password: demo@123  
 Role: Admin
+
+## Demo Video Link
+
+## Author
+
+Name: Ronak Kumar
+Enrollement No: 23113130
+Department: Civil Engineering (3rd year)
+GitHub: ronak-kumar06
