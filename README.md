@@ -1,121 +1,54 @@
-# E-commerce Product Management Dashboard
+# E-Commerce Product Management Dashboard (SSR)
 
-A server-side rendered (SSR) administrative dashboard for managing products in an e-commerce system. Built with Next.js 15, featuring fast page load times, improved SEO performance, and an efficient interface for administrators to manage product data.
+A **production-ready, server-side rendered (SSR) administrative dashboard** for managing products in an e-commerce system.  
+Built using **Next.js 15 (App Router)** with a strong focus on **performance, security, and real-world deployment practices**.
 
-## Features
+The application supports **admin-only authentication**, **product CRUD operations**, **image uploads via Cloudinary**, and is **deployed on Vercel**.
 
-- **Server-Side Rendering (SSR)** using Next.js for improved performance and SEO
-- **Complete Product Management** with Create, Read, Update, and Delete (CRUD) operations
-- **Multi-step Product Creation Forms** with strong input validation using Zod
-- **Interactive Data Visualization** for sales and stock metrics using Recharts
-- **Secure Image Upload and Storage** using Cloudinary
-- **Authentication and Authorization** ensuring only eligible admins can access the dashboard
-- **Secure Admin Onboarding** - only visible to existing admins
+---
 
-## Tech Stack
+## 🚀 Features
 
-- **Frontend & Backend**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **Data Fetching**: React Query (TanStack Query)
-- **Form Validation**: Zod
-- **Data Visualization**: Recharts
-- **Image Storage**: Cloudinary
-- **Database**: MongoDB with Mongoose
-- **Authentication**: NextAuth.js v5
-- **Styling**: Tailwind CSS
+- **Server-Side Rendering (SSR)** with Next.js 15 for fast load times and SEO
+- **Admin-only Authentication & Authorization** using Auth.js (NextAuth v5)
+- **Complete Product Management (CRUD)**
+- **Multi-step Product Forms** with validation using Zod
+- **Cloudinary Integration** for secure image upload & storage
+- **Interactive Dashboard Charts** using Recharts
+- **Protected API Routes** (admin-only access)
+- **Production-ready build** (passes strict Next.js 15 checks)
+- **Deployed on Vercel**
 
-## Prerequisites
+---
 
-Before you begin, ensure you have the following installed:
+## 🧰 Tech Stack
 
-- Node.js 18+ and npm
-- MongoDB (local instance or MongoDB Atlas)
-- Cloudinary account (free tier available)
+### Frontend & Backend
+- Next.js 15 (App Router, SSR)
+- TypeScript
+- Tailwind CSS
 
-## Setup Instructions
+### State & Validation
+- TanStack Query (React Query)
+- Zod
 
-### 1. Clone the Repository
+### Authentication
+- Auth.js / NextAuth v5
+- Credentials Provider
+- JWT-based sessions
+- Role-based access control (admin)
 
-```bash
-git clone <your-repository-url>
-cd CDC_dev_project
-```
+### Database & Media
+- MongoDB
+- Mongoose
+- Cloudinary
 
-### 2. Install Dependencies
+### Deployment
+- Vercel
 
-```bash
-npm install
-```
+---
 
-### 3. Environment Variables
-
-Create a `.env.local` file in the root directory:
-
-```env
-# MongoDB Connection
-MONGODB_URI=mongodb://localhost:27017/ecommerce-dashboard
-# Or for MongoDB Atlas: mongodb+srv://username:password@cluster.mongodb.net/ecommerce-dashboard
-
-# NextAuth Configuration
-NEXTAUTH_SECRET=your-secret-key-here-generate-a-random-string
-NEXTAUTH_URL=http://localhost:3000
-
-# Cloudinary Configuration
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
-
-# Node Environment
-NODE_ENV=development
-```
-
-**Important**: 
-- Generate a secure random string for `NEXTAUTH_SECRET`. You can use: `openssl rand -base64 32`
-- Get your Cloudinary credentials from [Cloudinary Dashboard](https://cloudinary.com/console)
-
-### 4. Set Up MongoDB
-
-Make sure MongoDB is running on your system. If using MongoDB Atlas, use the connection string in `MONGODB_URI`.
-
-### 5. Create Initial Admin User
-
-Run the seed script to create your first admin user:
-
-```bash
-npm run seed
-```
-
-Or manually create an admin user using MongoDB Compass or the MongoDB shell:
-
-```javascript
-use ecommerce-dashboard
-db.users.insertOne({
-  name: "Admin User",
-  email: "admin@example.com",
-  password: "$2a$10$...", // bcrypt hashed password
-  role: "admin",
-  createdAt: new Date(),
-  updatedAt: new Date()
-})
-```
-
-To hash a password, you can use an online bcrypt generator or run this Node.js script:
-
-```javascript
-const bcrypt = require('bcryptjs');
-const hash = bcrypt.hashSync('your-password', 10);
-console.log(hash);
-```
-
-### 6. Run the Development Server
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 CDC_dev_project/
@@ -216,25 +149,6 @@ Only existing admins can create new admin accounts:
 
 All API endpoints require admin authentication.
 
-## Deployment
-
-### Vercel Deployment (Recommended)
-
-1. Push your code to GitHub
-2. Import your project in [Vercel](https://vercel.com)
-3. Add environment variables in Vercel dashboard
-4. Deploy
-
-### Other Platforms
-
-The application can be deployed to any platform that supports Next.js:
-- Netlify
-- AWS Amplify
-- Railway
-- DigitalOcean App Platform
-
-Make sure to set all environment variables in your deployment platform.
-
 ## Workflow
 
 1. Admin requests the dashboard page
@@ -254,50 +168,23 @@ Make sure to set all environment variables in your deployment platform.
 - Input validation using Zod schemas
 - CSRF protection via NextAuth
 
-## Development
+## Deployment
 
-### Building for Production
+The application is deployed on **Vercel**.
 
-```bash
-npm run build
-npm start
-```
+Steps:
+1. Push code to GitHub
+2. Import the repository into Vercel
+3. Add required environment variables
+4. Deploy the project
+5. Update `NEXTAUTH_URL` with the generated `.vercel.app` URL
+6. Redeploy without cache
 
-### Linting
+The application uses server-side rendering and runs in the Node.js runtime.
 
-```bash
-npm run lint
-```
 
-## Troubleshooting
+## Demo Credentials (For Evaluation)
 
-### MongoDB Connection Issues
-
-- Ensure MongoDB is running
-- Check your `MONGODB_URI` is correct
-- Verify network access if using MongoDB Atlas
-
-### Cloudinary Upload Issues
-
-- Verify your Cloudinary credentials
-- Check file size limits (max 5MB)
-- Ensure file type is an image
-
-### Authentication Issues
-
-- Verify `NEXTAUTH_SECRET` is set
-- Check that `NEXTAUTH_URL` matches your deployment URL
-- Ensure admin user exists in database with correct role
-
-## License
-
-This project is licensed under the ISC License.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## Support
-
-For issues and questions, please open an issue in the GitHub repository.
-
+Email: demo.admin@example.com  
+Password: demo@123  
+Role: Admin
