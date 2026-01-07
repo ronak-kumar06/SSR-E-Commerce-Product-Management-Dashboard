@@ -1,83 +1,73 @@
-import { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import bcrypt from 'bcryptjs';
-import connectDB from './mongodb';
-import User from '@/models/User';
+import type { NextAuthConfig } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import connectDB from "./mongodb";
+import UserModel from "@/models/User";
 
-export const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthConfig = {
   providers: [
     CredentialsProvider({
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
-        email: { label: 'Email', type: 'email' },
-        password: { label: 'Password', type: 'password' },
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
+
       async authorize(credentials) {
-        try {
-          if (!credentials?.email || !credentials?.password) {
-            throw new Error('Please enter email and password');
-          }
-
-          // Ensure database connection
-          await connectDB();
-
-          const user = await User.findOne({ email: credentials.email });
-
-          if (!user) {
-            throw new Error('Invalid email or password');
-          }
-
-          if (user.role !== 'admin') {
-            throw new Error('Access denied. Admin access required.');
-          }
-
-          const isPasswordValid = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
-
-          if (!isPasswordValid) {
-            throw new Error('Invalid email or password');
-          }
-
-          return {
-            id: user._id.toString(),
-            email: user.email,
-            name: user.name,
-            role: user.role,
-          };
-        } catch (error) {
-          // Log error for debugging but don't expose internal details
-          console.error('Auth error:', error);
-          throw error;
+        if (!credentials?.email || !credentials?.password) {
+          return null;
         }
-      },
+
+        const email = credentials.email as string;
+        const password = credentials.password as string;
+
+        await connectDB();
+
+        const user = await UserModel.findOne({ email });
+        if (!user) return null;
+        if (user.role !== "admin") return null;
+
+        const isValid = await bcrypt.compare(password, user.password);
+        if (!isValid) return null;
+
+        return {
+          id: user._id.toString(),
+          email: user.email,
+          name: user.name,
+          role: user.role,
+        };
+      }
+      ,
     }),
   ],
+
   session: {
-    strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
   },
+
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.role = user.role;
+        token.role = (user as any).role;
       }
       return token;
     },
+
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id || '';
-        session.user.role = token.role;
+        (session.user as any).id = token.id;
+        (session.user as any).role = token.role;
       }
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
-  debug: process.env.NODE_ENV === 'development',
-};
 
+  secret: process.env.NEXTAUTH_SECRET,
+  debug: process.env.NODE_ENV === "development",
+};

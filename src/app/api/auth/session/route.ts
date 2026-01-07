@@ -1,4 +1,4 @@
-import { auth } from '@/lib/auth-helper';
+import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 
 /**

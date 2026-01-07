@@ -1,8 +1,8 @@
-import { redirect } from 'next/navigation';
-import { auth } from '@/lib/auth-helper';
-import connectDB from '@/lib/mongodb';
-import Product from '@/models/Product';
-import EditProductClient from './EditProductClient';
+import { redirect } from "next/navigation";
+import { auth } from "@/auth";
+import connectDB from "@/lib/mongodb";
+import Product from "@/models/Product";
+import EditProductClient from "./EditProductClient";
 
 async function getProduct(id: string) {
   await connectDB();
@@ -23,17 +23,16 @@ export default async function EditProductPage({
 }) {
   const session = await auth();
 
-  if (!session || (session.user as any)?.role !== 'admin') {
-    redirect('/login');
+  if (!session || (session.user as any)?.role !== "admin") {
+    redirect("/login");
   }
 
   const { id } = await params;
   const product = await getProduct(id);
 
   if (!product) {
-    redirect('/dashboard');
+    redirect("/dashboard");
   }
 
-  return <EditProductClient product={product} />;
+  return <EditProductClient product={JSON.parse(JSON.stringify(product))} />;
 }
-
